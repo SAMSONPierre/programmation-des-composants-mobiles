@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Projet</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="type">Type a word or sentence…</string>
+    <string name="hint">e.g To be or not to be</string>
+    <string name="selectDictionary">Select a dictionary</string>
+    <string name="google">Not satisfied with current options?</string>
 </resources>

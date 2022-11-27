@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(binding.tabLayout, binding.pager){
             tab, position -> tab.text=tabs[position]
         }.attach()
+
     }
 
     /** changer la couleur du status bar **/

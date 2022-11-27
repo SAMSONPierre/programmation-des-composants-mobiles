@@ -1,26 +1,28 @@
 package fr.uparis.projet
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 
-@Entity
+@Entity(indices = [Index(value = ["name"], unique = true)])
 data class Language(
     @ColumnInfo(name="idLang", index=true)
     @PrimaryKey(autoGenerate=true) var idLang: Long,
     var name: String
 )
 
+// pour pouvoir ajouter une langue sans cle primaire
+data class Lang(
+    var name: String
+)
+
 @Entity(
     foreignKeys=[ForeignKey(
         entity=Language::class,
-        parentColumns=["idLang"],
+        parentColumns=["name"],
         childColumns=["lang_src"],
         onDelete=ForeignKey.CASCADE
     ), ForeignKey(
         entity=Language::class,
-        parentColumns=["idLang"],
+        parentColumns=["name"],
         childColumns=["lang_dst"],
         onDelete=ForeignKey.CASCADE
     )]
@@ -33,6 +35,13 @@ data class Word(
     var urlToTranslation: String
 )
 
+data class Wor(
+    var word: String,
+    var lang_src: String,
+    var lang_dst: String,
+    var urlToTranslation: String
+)
+
 // pour pouvoir supprimer un "mot" (pas exactement, juste
 // une traduction specifique de ce mot) avec sa cle
 data class WordInfo(
@@ -42,14 +51,14 @@ data class WordInfo(
 @Entity(
     foreignKeys=[ForeignKey(
         entity=Language::class,
-        parentColumns=["idLang"],
+        parentColumns=["name"],
         childColumns=["lang_src"],
         onDelete=ForeignKey.CASCADE
     ), ForeignKey(
-            entity=Language::class,
-            parentColumns=["idLang"],
-            childColumns=["lang_dst"],
-            onDelete=ForeignKey.CASCADE
+        entity=Language::class,
+        parentColumns=["name"],
+        childColumns=["lang_dst"],
+        onDelete=ForeignKey.CASCADE
     )]
 )
 data class Dictionary(

@@ -1,7 +1,6 @@
 package fr.uparis.projet
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,33 +9,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import fr.uparis.projet.databinding.FragmentListDictionaryBinding
-import fr.uparis.projet.databinding.FragmentListDictionaryListBinding
 import fr.uparis.projet.databinding.FragmentListWordBinding
+import fr.uparis.projet.databinding.FragmentListWordListBinding
 
-class ListDictionaryFragment() : Fragment() {
-    private val model: MainViewModel by activityViewModels() // shared viewModel entre MainActivity et les fragments
-    lateinit var binding: FragmentListDictionaryListBinding
-    val adapter by lazy{MyDictionaryRecyclerViewAdapter(model.listDictionaries.value?:listOf(), model)}
+/**
+ * A fragment representing a list of Items.
+ */
+class ListWordFragment(idDic: Long) : Fragment() {
+    private val model: MainViewModel by activityViewModels()
+    lateinit var binding: FragmentListWordListBinding
+    val adapter by lazy{MyWordRecyclerViewAdapter(model.selectedDicWords?.value?: listOf(), model)}
 
     override fun onStart() {
         super.onStart()
-        /** observer sur la liste de dictionnaires **/
-        model.listDictionaries.observe(viewLifecycleOwner){
-            adapter.dictionaries=it
+        /** observer sur la liste de mots d'un dictionnaire **/
+        model.selectedDicWords?.observe(viewLifecycleOwner){
+            adapter.words=it
             adapter.notifyDataSetChanged()
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view=inflater.inflate(R.layout.fragment_list_dictionary_list, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_list_word_list, container, false)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         /** creation du binding **/
-        binding=FragmentListDictionaryListBinding.bind(view)
+        binding=FragmentListWordListBinding.bind(view)
 
         /** set adapter de notre recycler view **/
         binding.recyclerView.adapter=adapter
@@ -45,6 +46,6 @@ class ListDictionaryFragment() : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance()=ListDictionaryFragment()
+        fun newInstance(idDic: Long)=ListWordFragment(idDic)
     }
 }

@@ -15,15 +15,38 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import fr.uparis.projet.databinding.ActivityMainBinding
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     private val model: MainViewModel by viewModels()
     private val binding: ActivityMainBinding by lazy{ActivityMainBinding.inflate(layoutInflater)}
 
-    class ScreenSlidePagerAdapter(fa: FragmentActivity, var fragmentList: MutableList<Fragment>): FragmentStateAdapter( fa ){
+    class ScreenSlidePagerAdapter(fa: FragmentActivity, var fragmentList: MutableList<Fragment>): FragmentStateAdapter(fa){
         override fun getItemCount(): Int = fragmentList.size
         override fun createFragment(position: Int): Fragment =
             fragmentList[position]
+
+        /** pour pouvoir remplacer la liste de dictionnaires par la liste de mots **/
+        /*override fun getItemId(position: Int): Long {
+            val fragment=fragmentList[position]
+            return getID(fragment)
+        }
+
+        override fun containsItem(itemId: Long): Boolean {
+            for(fragment in fragmentList){
+                if(getID(fragment)==itemId) return true
+            }
+            return false
+        }*/
+
+        /*private fun getID(f: Fragment): Long{
+
+        }*/
+
+        fun replaceFragment(pos: Int, f: Fragment){
+            fragmentList[pos]=f
+            notifyDataSetChanged()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +71,18 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(binding.tabLayout, binding.pager){
             tab, position -> tab.text=tabs[position]
         }.attach()
+
+        //TODO partie tests affichage a enlever quand ok
+        thread {
+            model.dao.insertLanguage(Lang("English"))
+            model.dao.insertLanguage(Lang("French"))
+            model.dao.insertLanguage(Lang("Chinese"))
+            model.dao.insertDictionary(DictionaryLang("English", "French", "https://fr.wikipedia.org/"))
+            model.dao.insertDictionary(DictionaryLang("French", "English", "https://www.linguee.fr/francais-anglais/"))
+            model.dao.insertDictionary(DictionaryLang("French", "Chinese", "https://blabla"))
+            model.dao.insertWord(WordInfo2("bonjour", "French", "English", "https://www.linguee.fr/francais-anglais/search?source=auto&query=bonjour&cw=336"))
+            model.dao.insertWord(WordInfo2("ciment", "French", "English", "https://www.linguee.fr/francais-anglais/search?source=auto&query=ciment&cw=336"))
+        }
     }
 
     /** changer la couleur du status bar **/

@@ -1,26 +1,28 @@
 package fr.uparis.projet
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 
-@Entity
+@Entity(indices = [Index(value = ["name"], unique = true)])
 data class Language(
     @ColumnInfo(name="idLang", index=true)
     @PrimaryKey(autoGenerate=true) var idLang: Long,
     var name: String
 )
 
+// pour pouvoir ajouter une langue sans cle primaire
+data class Lang(
+    var name: String
+)
+
 @Entity(
     foreignKeys=[ForeignKey(
         entity=Language::class,
-        parentColumns=["idLang"],
+        parentColumns=["name"],
         childColumns=["lang_src"],
         onDelete=ForeignKey.CASCADE
     ), ForeignKey(
         entity=Language::class,
-        parentColumns=["idLang"],
+        parentColumns=["name"],
         childColumns=["lang_dst"],
         onDelete=ForeignKey.CASCADE
     )]
@@ -39,15 +41,23 @@ data class WordInfo(
     var idWord: Long
 )
 
+// pour pouvoir inserer un mot sans cle primaire
+data class WordInfo2(
+    var word: String,
+    var lang_src: String,
+    var lang_dst: String,
+    var urlToTranslation: String
+)
+
 @Entity(
     foreignKeys=[ForeignKey(
         entity=Language::class,
-        parentColumns=["idLang"],
+        parentColumns=["name"],
         childColumns=["lang_src"],
         onDelete=ForeignKey.CASCADE
     ), ForeignKey(
             entity=Language::class,
-            parentColumns=["idLang"],
+            parentColumns=["name"],
             childColumns=["lang_dst"],
             onDelete=ForeignKey.CASCADE
     )]

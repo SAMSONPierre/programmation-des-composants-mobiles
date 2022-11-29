@@ -8,6 +8,10 @@ import androidx.room.Dao
 @Dao
 interface Dao {
     /** Insertions **/
+    // ajouter une langue sans la cle
+    @Insert(entity=Language::class, onConflict=OnConflictStrategy.REPLACE)
+    fun insertLanguage(vararg lang: Lang): List<Long>
+
     // ajouter une langue
     @Insert(onConflict=OnConflictStrategy.ABORT)
     fun insertLanguage(vararg lang: Language): List<Long>
@@ -16,12 +20,16 @@ interface Dao {
     @Insert(onConflict=OnConflictStrategy.ABORT)
     fun insertWord(vararg word: Word): List<Long>
 
+    // ajouter la traduction d'un mot sans cle prmimaire
+    @Insert(entity=Word::class, onConflict=OnConflictStrategy.REPLACE)
+    fun insertWord(vararg word: WordInfo2): List<Long>
+
     // ajouter un dictionnaire
     @Insert(onConflict=OnConflictStrategy.ABORT)
     fun insertDictionary(vararg dic: Dictionary): List<Long>
 
     // ajouter un dictionnaire sans la cle
-    @Insert(entity=Dictionary::class, onConflict=OnConflictStrategy.ABORT)
+    @Insert(entity=Dictionary::class, onConflict=OnConflictStrategy.REPLACE)
     fun insertDictionary(vararg dic: DictionaryLang): List<Long>
 
     // ajouter l'association mot-dico (WordDic)
@@ -48,5 +56,10 @@ interface Dao {
     @Query("SELECT * FROM Dictionary")
     fun loadAllDictionaries(): LiveData<List<Dictionary>>
 
-    // TODO : serait-il interessant d'avoir une requete sur WordDicAssociation ?
+    // selectionner les mots d'un dictionnaire
+    @Query("SELECT Word.idWord, Word.word, Word.lang_src, Word.lang_dst, Word.urlToTranslation " +
+            "FROM Word " +
+            "NATURAL JOIN WordDicAssociation " +
+            "WHERE WordDicAssociation.idDic = :idDictionary")
+    fun loadWordsFromDic(idDictionary: Long): LiveData<List<Word>>
 }

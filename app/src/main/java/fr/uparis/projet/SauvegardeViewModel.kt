@@ -32,9 +32,6 @@ class SauvegardeViewModel(application: Application) : AndroidViewModel(applicati
         }.start()
     }
 
-    fun insertWordDicAssociation(w_name : String, src_name : String, dst_name: String, url : String){
-
-    }
 
     val insertInfo = MutableLiveData<Int>(0)
 }

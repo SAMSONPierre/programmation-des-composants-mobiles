@@ -16,26 +16,23 @@ interface Dao {
     @Insert(onConflict=OnConflictStrategy.ABORT)
     fun insertLanguage(vararg lang: Language): List<Long>
 
-    // ajouter la traduction d'un mot (Word)
-    @Insert(onConflict=OnConflictStrategy.ABORT)
-    fun insertWord(vararg word: Word): List<Long>
-
-    // ajouter une langue sans la cle
+    // ajouter un mot sans la cle
     @Insert(entity=Word::class, onConflict=OnConflictStrategy.REPLACE)
     fun insertWord(vararg wor: Wor): List<Long>
 
-
-    // ajouter un dictionnaire
+    // ajouter la traduction d'un mot (Word)
     @Insert(onConflict=OnConflictStrategy.ABORT)
-    fun insertDictionary(vararg dic: Dictionary): List<Long>
+    fun insertWord(vararg word: Word): List<Long>
 
     // ajouter un dictionnaire sans la cle
     @Insert(entity=Dictionary::class, onConflict=OnConflictStrategy.REPLACE)
     fun insertDictionary(vararg dic: DictionaryLang): List<Long>
 
-    // ajouter l'association mot-dico (WordDic)
+    // ajouter un dictionnaire
     @Insert(onConflict=OnConflictStrategy.ABORT)
-    fun insertWordDictionary(vararg wd: WordDicAssociation): List<Long>
+    fun insertDictionary(vararg dic: Dictionary): List<Long>
+
+
 
     // TODO : quelles tables sont susceptibles d'etre mises a jour ?
 

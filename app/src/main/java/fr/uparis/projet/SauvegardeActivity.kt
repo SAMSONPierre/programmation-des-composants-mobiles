@@ -35,7 +35,7 @@ class SauvegardeActivity : AppCompatActivity() {
                 // Insertion des différents éléments
                 model.insertLanguage(src_lang)
                 model.insertLanguage(dst_lang)
-                model.insertWord(word,src_lang,dst_lang,word)
+                model.insertWord(word,src_lang,dst_lang,url)
                 model.insertDictionnary(src_lang,dst_lang,url)
 
                 // On retourne à la page principale

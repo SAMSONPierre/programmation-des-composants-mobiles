@@ -28,7 +28,9 @@ data class Lang(
     )]
 )
 data class Word(
-    @PrimaryKey(autoGenerate=true) var idWord: Long,
+    @ColumnInfo(name="idWord", index=true)
+    @PrimaryKey(autoGenerate = true)
+    var idWord : Long = 0,
     var word: String,
     @ColumnInfo(name="lang_src", index=true) var lang_src: String,
     @ColumnInfo(name="lang_dst", index=true) var lang_dst: String,
@@ -63,7 +65,8 @@ data class WordInfo(
 )
 data class Dictionary(
     @ColumnInfo(name="idDic", index=true)
-    @PrimaryKey(autoGenerate=true) val idDic: Long,
+    @PrimaryKey(autoGenerate = true)
+    var idDic: Long = 0,
     @ColumnInfo(name="lang_src", index=true) var lang_src: String,
     @ColumnInfo(name="lang_dst", index=true) var lang_dst: String,
     var urlPrefix: String
@@ -79,7 +82,7 @@ data class DictionaryLang(
 
 // pour pouvoir supprimer un dico juste a partir de sa cle
 class DictionaryInfo(
-    val idDic: Long
+    var idDic: Long
 )
 
 // Association plusieurs a plusieurs entre mot et dictionnaire
@@ -87,19 +90,22 @@ class DictionaryInfo(
 // et un dico contient plusieurs mots
 @Entity(
     primaryKeys=["idWord", "idDic"],
+    indices = [Index(value = ["idWord"] )],
     foreignKeys=[ForeignKey(
         entity=Word::class,
         parentColumns=["idWord"],
         childColumns=["idWord"],
+        deferred = true,
         onDelete=ForeignKey.CASCADE
     ), ForeignKey(
         entity=Dictionary::class,
         parentColumns=["idDic"],
         childColumns=["idDic"],
+        deferred = true,
         onDelete=ForeignKey.CASCADE
     )]
 )
 data class WordDicAssociation(
-    var idWord: Long,
-    @ColumnInfo(name="idDic", index=true) var idDic: Long
+    val idWord: Long,
+    val idDic: Long
 )

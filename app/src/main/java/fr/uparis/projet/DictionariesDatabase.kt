@@ -5,7 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities=[Language::class, Word::class, Dictionary::class, WordDicAssociation::class], version=3)
+@Database(entities=[Language::class, Word::class, Dictionary::class, WordDicAssociation::class], version=12
+)
 abstract class DictionariesDatabase: RoomDatabase() {
     abstract fun dao(): Dao
 

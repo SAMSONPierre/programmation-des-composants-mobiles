@@ -5,7 +5,8 @@ import androidx.room.*
 @Entity(indices = [Index(value = ["name"], unique = true)])
 data class Language(
     @ColumnInfo(name="idLang", index=true)
-    @PrimaryKey(autoGenerate=true) var idLang: Long,
+    @PrimaryKey
+    var idLang : Long?= null,
     var name: String
 )
 
@@ -29,8 +30,8 @@ data class Lang(
 )
 data class Word(
     @ColumnInfo(name="idWord", index=true)
-    @PrimaryKey(autoGenerate = true)
-    var idWord : Long = 0,
+    @PrimaryKey
+    var idWord : Long?= null,
     var word: String,
     @ColumnInfo(name="lang_src", index=true) var lang_src: String,
     @ColumnInfo(name="lang_dst", index=true) var lang_dst: String,
@@ -65,8 +66,8 @@ data class WordInfo(
 )
 data class Dictionary(
     @ColumnInfo(name="idDic", index=true)
-    @PrimaryKey(autoGenerate = true)
-    var idDic: Long = 0,
+    @PrimaryKey
+    var idDic : Long?= null,
     @ColumnInfo(name="lang_src", index=true) var lang_src: String,
     @ColumnInfo(name="lang_dst", index=true) var lang_dst: String,
     var urlPrefix: String
@@ -89,21 +90,7 @@ class DictionaryInfo(
 // car un mot peut apparaitre dans plusierus dicos
 // et un dico contient plusieurs mots
 @Entity(
-    primaryKeys=["idWord", "idDic"],
-    indices = [Index(value = ["idWord"] )],
-    foreignKeys=[ForeignKey(
-        entity=Word::class,
-        parentColumns=["idWord"],
-        childColumns=["idWord"],
-        deferred = true,
-        onDelete=ForeignKey.CASCADE
-    ), ForeignKey(
-        entity=Dictionary::class,
-        parentColumns=["idDic"],
-        childColumns=["idDic"],
-        deferred = true,
-        onDelete=ForeignKey.CASCADE
-    )]
+    primaryKeys=["idWord", "idDic"]
 )
 data class WordDicAssociation(
     val idWord: Long,

@@ -9,28 +9,28 @@ import androidx.room.Dao
 interface Dao {
     /** Insertions **/
     // ajouter une langue sans la cle
-    @Insert(entity=Language::class, onConflict=OnConflictStrategy.REPLACE)
-    fun insertLanguage(vararg lang: Lang): List<Long>
+
 
     // ajouter une langue
-    @Insert(onConflict=OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertLanguage(vararg lang: Language): List<Long>
 
     // ajouter un mot sans la cle
-    @Insert(entity=Word::class, onConflict=OnConflictStrategy.REPLACE)
-    fun insertWord(vararg wor: Wor): List<Long>
+
 
     // ajouter la traduction d'un mot (Word)
-    @Insert(onConflict=OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertWord(vararg word: Word): List<Long>
 
     // ajouter un dictionnaire sans la cle
-    @Insert(entity=Dictionary::class, onConflict=OnConflictStrategy.REPLACE)
-    fun insertDictionary(vararg dic: DictionaryLang): List<Long>
+
 
     // ajouter un dictionnaire
-    @Insert(onConflict=OnConflictStrategy.ABORT)
+    @Insert(onConflict=OnConflictStrategy.IGNORE)
     fun insertDictionary(vararg dic: Dictionary): List<Long>
+
+    @Insert(onConflict=OnConflictStrategy.IGNORE)
+    fun insertWordDicAssociation(vararg wordDicAssociation: WordDicAssociation): List<Long>
 
 
 
@@ -55,4 +55,13 @@ interface Dao {
     fun loadAllDictionaries(): LiveData<List<Dictionary>>
 
     // TODO : serait-il interessant d'avoir une requete sur WordDicAssociation ?
+    @Query("SELECT * FROM WordDicAssociation")
+    fun loadAllWordDicAssociation(): LiveData<List<WordDicAssociation>>
+
+    @Query("SELECT idDic FROM Dictionary ORDER BY idDic DESC LIMIT 1")
+    fun getLastDic(): LiveData<Long>
+
+    @Query("SELECT idWord FROM Word ORDER BY idWord DESC LIMIT 1")
+    fun getLastWord(): LiveData<Long>
+
 }

@@ -15,7 +15,7 @@ import fr.uparis.projet.databinding.FragmentListWordListBinding
 /**
  * A fragment representing a list of Items.
  */
-class ListWordFragment(idDic: Long) : Fragment() {
+class ListWordFragment() : Fragment() {
     private val model: MainViewModel by activityViewModels()
     lateinit var binding: FragmentListWordListBinding
     val adapter by lazy{MyWordRecyclerViewAdapter(model.selectedDicWords?.value?: listOf(), model)}
@@ -26,6 +26,10 @@ class ListWordFragment(idDic: Long) : Fragment() {
         model.selectedDicWords?.observe(viewLifecycleOwner){
             adapter.words=it
             adapter.notifyDataSetChanged()
+        }
+
+        model.selectedDicWords2?.observe(viewLifecycleOwner){
+
         }
     }
 
@@ -46,6 +50,8 @@ class ListWordFragment(idDic: Long) : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(idDic: Long)=ListWordFragment(idDic)
+        fun newInstance(idDic: Long)=ListWordFragment().apply {
+            arguments=Bundle().apply { putLong("idDic", idDic) }
+        }
     }
 }

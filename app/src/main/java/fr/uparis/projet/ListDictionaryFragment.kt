@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.snackbar.Snackbar
 import fr.uparis.projet.databinding.FragmentListDictionaryBinding
 import fr.uparis.projet.databinding.FragmentListDictionaryListBinding
 import fr.uparis.projet.databinding.FragmentListWordBinding
@@ -41,6 +43,28 @@ class ListDictionaryFragment() : Fragment() {
         /** set adapter de notre recycler view **/
         binding.recyclerView.adapter=adapter
         binding.recyclerView.layoutManager=LinearLayoutManager(context)
+
+        /** on s'occupe de notre fab **/
+        initFAB()
+    }
+
+    /** lorsqu'on a selectionne un dictionnaire
+     *  permet de voir a l'interieur du dico : sa liste de mots
+     **/
+    private fun initFAB(){
+        binding.fab.setOnClickListener {
+            if(model.selectedDic==null){
+                Snackbar.make(requireActivity().findViewById(R.id.main_frame), "Please select a dictionary.", Snackbar.LENGTH_LONG)
+                        .show()
+            }
+            else{
+                model.loadWordsOfSelectedDic(model.selectedDic!!.idDic)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, ListWordFragment.newInstance(model.selectedDic!!.idDic))
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
     }
 
     companion object {

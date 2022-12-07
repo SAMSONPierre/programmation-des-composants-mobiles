@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
+   <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorBackground">
@@ -18,28 +18,28 @@
             android:background="@color/colorPrimaryDark"
             android:elevation="4dp"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:theme="@style/CustomToolbarTheme"
             app:popupTheme="@style/CustomPopupTheme"
-            />
-            <!-- android:theme="?attr/actionBarTheme" -->
+            app:theme="@style/CustomToolbarTheme" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            app:layout_scrollFlags="scroll|enterAlways"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:tabSelectedTextColor="@color/teal_700"
-            app:tabTextColor="@color/black"
-            />
+       <androidx.fragment.app.FragmentContainerView
+           android:id="@+id/fragment_container_view"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"/>
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/pager"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+       <!--<com.google.android.material.tabs.TabLayout
+           android:id="@+id/tabLayout"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@color/colorPrimary"
+           app:layout_scrollFlags="scroll|enterAlways"
+           app:tabSelectedTextColor="@color/teal_700"
+           app:tabTextColor="@color/black" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+       <androidx.viewpager2.widget.ViewPager2
+           android:id="@+id/pager"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_weight="1" />-->
+   </com.google.android.material.appbar.AppBarLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

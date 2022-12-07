@@ -62,4 +62,8 @@ interface Dao {
             "NATURAL JOIN WordDicAssociation " +
             "WHERE WordDicAssociation.idDic = :idDictionary")
     fun loadWordsFromDic(idDictionary: Long): LiveData<List<Word>>
+
+    @Transaction
+    @Query("SELECT * FROM Dictionary")
+    fun loadWordsFromDic(): LiveData<List<WordDictionaryPair>>
 }

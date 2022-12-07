@@ -107,3 +107,19 @@ data class WordDicAssociation(
     var idWord: Long,
     @ColumnInfo(name="idDic", index=true) var idDic: Long
 )
+
+data class WordDictionaryPair(
+    @Embedded
+    var dictionary: Dictionary,
+    @Relation(
+        parentColumn = "idDic",
+        entity = Word::class,
+        entityColumn = "idWord",
+        associateBy = Junction(
+            value = WordDicAssociation::class,
+            parentColumn = "idDic",
+            entityColumn = "idWord"
+        )
+    )
+    var word: List<WordInfo2>
+)

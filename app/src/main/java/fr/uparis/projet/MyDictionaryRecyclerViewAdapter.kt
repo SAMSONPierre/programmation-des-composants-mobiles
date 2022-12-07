@@ -43,9 +43,20 @@ class MyDictionaryRecyclerViewAdapter(var dictionaries: List<Dictionary>, privat
                     .commit()
             }
 
-            when (position % 2) {
-                0 -> (holder.itemView as CardView).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.salmonDarkest))
-                1 -> (holder.itemView as CardView).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.salmonDarker))
+            if(holder.dictionary==model.selectedDic){
+                (holder.itemView as CardView).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.salmonDarkest))
+            }
+            else {
+                when (position % 2) {
+                    0 -> (holder.itemView as CardView).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.salmon))
+                    1 -> (holder.itemView as CardView).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.salmonDarker))
+                }
+            }
+
+            holder.itemView.setOnClickListener{
+                if(model.selectedDic!=holder.dictionary) model.selectedDic=holder.dictionary
+                else model.selectedDic=null
+                notifyDataSetChanged()
             }
         }
 

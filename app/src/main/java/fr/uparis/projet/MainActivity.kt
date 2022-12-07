@@ -3,6 +3,7 @@ package fr.uparis.projet
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
@@ -10,10 +11,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import fr.uparis.projet.databinding.ActivityMainBinding
 import kotlin.concurrent.thread
 
@@ -21,33 +18,11 @@ class MainActivity : AppCompatActivity() {
     private val model: MainViewModel by viewModels()
     private val binding: ActivityMainBinding by lazy{ActivityMainBinding.inflate(layoutInflater)}
 
-    class ScreenSlidePagerAdapter(fa: FragmentActivity, var fragmentList: MutableList<Fragment>): FragmentStateAdapter(fa){
+    /*class ScreenSlidePagerAdapter(fa: FragmentActivity, var fragmentList: MutableList<Fragment>): FragmentStateAdapter(fa){
         override fun getItemCount(): Int = fragmentList.size
         override fun createFragment(position: Int): Fragment =
             fragmentList[position]
-
-        /** pour pouvoir remplacer la liste de dictionnaires par la liste de mots **/
-        /*override fun getItemId(position: Int): Long {
-            val fragment=fragmentList[position]
-            return getID(fragment)
-        }
-
-        override fun containsItem(itemId: Long): Boolean {
-            for(fragment in fragmentList){
-                if(getID(fragment)==itemId) return true
-            }
-            return false
-        }*/
-
-        /*private fun getID(f: Fragment): Long{
-
-        }*/
-
-        fun replaceFragment(pos: Int, f: Fragment){
-            fragmentList[pos]=f
-            notifyDataSetChanged()
-        }
-    }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,20 +32,25 @@ class MainActivity : AppCompatActivity() {
         setStatusBarColor()
 
         /** creation de nos fragments **/
-        val searchFragment=SearchTranslationFragment.newInstance()
+        /*val searchFragment=SearchTranslationFragment.newInstance()
         val dictionaryFragment=ListDictionaryFragment.newInstance()
-
+*/
         /** creation de notre pager adapter pour le contenu de pager **/
-        val pagerAdapter=ScreenSlidePagerAdapter(
+        /*val pagerAdapter= ViewPagerFragment.ScreenSlidePagerAdapter(
             this, mutableListOf(searchFragment, dictionaryFragment)
         ) // le relie aussi a notre activity this
         binding.pager.adapter=pagerAdapter
 
-        /** mettre les noms de nos tabs **/
+        *//** mettre les noms de nos tabs **//*
         val tabs=listOf("SEARCH", "DICTIONARIES")
         TabLayoutMediator(binding.tabLayout, binding.pager){
             tab, position -> tab.text=tabs[position]
-        }.attach()
+        }.attach()*/
+
+        /** ajout de notre fragment avec view pager **/
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_view, ViewPagerFragment.newInstance())
+            .commit()
 
         //TODO partie tests affichage a enlever quand ok
         thread {
@@ -84,6 +64,8 @@ class MainActivity : AppCompatActivity() {
             model.dao.insertWord(WordInfo2("ciment", "French", "English", "https://www.linguee.fr/francais-anglais/search?source=auto&query=ciment&cw=336"))
         }
     }
+
+
 
     /** changer la couleur du status bar **/
     private fun setStatusBarColor(){

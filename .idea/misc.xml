@@ -3,12 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Android/TP/Projet/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Android/TP/Projet/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Android/TP/Projet/app/src/main/res/layout/fragment_list_dictionary.xml" value="0.2" />
         <entry key="..\:/Android/TP/Projet/app/src/main/res/layout/fragment_list_dictionary_list.xml" value="0.176" />
         <entry key="..\:/Android/TP/Projet/app/src/main/res/layout/fragment_list_word.xml" value="0.1" />
         <entry key="..\:/Android/TP/Projet/app/src/main/res/layout/fragment_list_word_list.xml" value="0.264" />
         <entry key="..\:/Android/TP/Projet/app/src/main/res/layout/fragment_search_translation.xml" value="0.25416666666666665" />
+        <entry key="..\:/Android/TP/Projet/app/src/main/res/layout/fragment_view_pager.xml" value="0.2" />
         <entry key="..\:/Android/TP/Projet/app/src/main/res/menu/main_menu_layout.xml" value="0.1" />
       </map>
     </option>

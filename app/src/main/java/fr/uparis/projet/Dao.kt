@@ -9,31 +9,31 @@ import androidx.room.Dao
 interface Dao {
     /** Insertions **/
     // ajouter une langue sans la cle
-    @Insert(entity=Language::class, onConflict=OnConflictStrategy.REPLACE)
+    @Insert(entity=Language::class, onConflict=OnConflictStrategy.IGNORE)
     fun insertLanguage(vararg lang: Lang): List<Long>
 
     // ajouter une langue
-    @Insert(onConflict=OnConflictStrategy.ABORT)
+    @Insert(onConflict=OnConflictStrategy.IGNORE)
     fun insertLanguage(vararg lang: Language): List<Long>
 
     // ajouter la traduction d'un mot (Word)
-    @Insert(onConflict=OnConflictStrategy.ABORT)
+    @Insert(onConflict=OnConflictStrategy.IGNORE)
     fun insertWord(vararg word: Word): List<Long>
 
     // ajouter la traduction d'un mot sans cle prmimaire
-    @Insert(entity=Word::class, onConflict=OnConflictStrategy.REPLACE)
+    @Insert(entity=Word::class, onConflict=OnConflictStrategy.IGNORE)
     fun insertWord(vararg word: WordInfo2): List<Long>
 
     // ajouter un dictionnaire
-    @Insert(onConflict=OnConflictStrategy.ABORT)
+    @Insert(onConflict=OnConflictStrategy.IGNORE)
     fun insertDictionary(vararg dic: Dictionary): List<Long>
 
     // ajouter un dictionnaire sans la cle
-    @Insert(entity=Dictionary::class, onConflict=OnConflictStrategy.REPLACE)
+    @Insert(entity=Dictionary::class, onConflict=OnConflictStrategy.IGNORE)
     fun insertDictionary(vararg dic: DictionaryLang): List<Long>
 
     // ajouter l'association mot-dico (WordDic)
-    @Insert(onConflict=OnConflictStrategy.ABORT)
+    @Insert(onConflict=OnConflictStrategy.IGNORE)
     fun insertWordDictionary(vararg wd: WordDicAssociation): List<Long>
 
     // TODO : quelles tables sont susceptibles d'etre mises a jour ?
@@ -66,4 +66,10 @@ interface Dao {
     @Transaction
     @Query("SELECT * FROM Dictionary")
     fun loadWordsFromDic(): LiveData<List<WordDictionaryPair>>
+
+    @Query("SELECT idDic FROM Dictionary ORDER BY idDic DESC LIMIT 1")
+    fun getLastDic(): LiveData<Long>
+
+    @Query("SELECT idWord FROM Word ORDER BY idWord DESC LIMIT 1")
+    fun getLastWord(): LiveData<Long>
 }

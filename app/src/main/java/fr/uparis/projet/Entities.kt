@@ -15,6 +15,7 @@ data class Lang(
 )
 
 @Entity(
+    indices = [Index(value = ["word","lang_src","lang_dst"], unique = true)],
     foreignKeys=[ForeignKey(
         entity=Language::class,
         parentColumns=["name"],
@@ -50,6 +51,7 @@ data class WordInfo2(
 )
 
 @Entity(
+    indices = [Index(value = ["lang_src","lang_dst","urlPrefix"], unique = true)],
     foreignKeys=[ForeignKey(
         entity=Language::class,
         parentColumns=["name"],
@@ -88,24 +90,10 @@ class DictionaryInfo(
 // et un dico contient plusieurs mots
 @Entity(
     primaryKeys=["idWord", "idDic"],
-    indices = [Index(value = ["idWord"] )],
-    foreignKeys=[ForeignKey(
-        entity=Word::class,
-        parentColumns=["idWord"],
-        childColumns=["idWord"],
-        deferred = true,
-        onDelete=ForeignKey.CASCADE
-    ), ForeignKey(
-        entity=Dictionary::class,
-        parentColumns=["idDic"],
-        childColumns=["idDic"],
-        deferred = true,
-        onDelete=ForeignKey.CASCADE
-    )]
 )
 data class WordDicAssociation(
     var idWord: Long,
-    @ColumnInfo(name="idDic", index=true) var idDic: Long
+    var idDic: Long
 )
 
 data class WordDictionaryPair(

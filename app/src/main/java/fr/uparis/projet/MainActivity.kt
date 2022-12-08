@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container_view, ViewPagerFragment.newInstance())
             .commit()
-
+        /*
         //TODO partie tests affichage a enlever quand ok
         thread {
             model.dao.insertLanguage(Lang("English"))
@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
             model.dao.insertWord(WordInfo2("bonjour", "French", "English", "https://www.linguee.fr/francais-anglais/search?source=auto&query=bonjour&cw=336"))
             model.dao.insertWord(WordInfo2("ciment", "French", "English", "https://www.linguee.fr/francais-anglais/search?source=auto&query=ciment&cw=336"))
         }
+        */
     }
 
 

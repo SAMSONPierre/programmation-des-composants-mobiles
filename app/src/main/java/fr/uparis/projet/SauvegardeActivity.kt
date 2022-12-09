@@ -15,15 +15,23 @@ class SauvegardeActivity : AppCompatActivity() {
     private var lastDic : Long = 0
     private var lastWord : Long = 0
 
+
+    fun parseURL(word : String, url : String) : String{
+        var index = url.indexOf(word.lowercase().trim());
+        return if(index == -1) ""
+        else url.subSequence(0,index).toString()
+
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySauvegardeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        model.getLastWord().observe(this){
+        model.idWord.observe(this){
             lastWord = it
+
         }
-        model.getLastDic().observe(this){
+        model.idDic.observe(this){
             lastDic = it
         }
 
@@ -34,25 +42,32 @@ class SauvegardeActivity : AppCompatActivity() {
         }
 
         binding.saveButton.setOnClickListener{
-            val url = binding.dictUrlEdit.text.toString()
-            val src_lang = binding.sourceEdit.text.toString()
-            val dst_lang = binding.targetEdit.text.toString()
-            val word = binding.wordEdit.text.toString()
-            if(src_lang == "" || dst_lang == "" || word == ""){
+            val urlWord= binding.dictUrlEdit.text.toString().trim()
+            val langSRC = binding.sourceEdit.text.toString().trim()
+            val langDST = binding.targetEdit.text.toString().trim()
+            val word = binding.wordEdit.text.toString().trim()
+            val urlDic = parseURL(word,urlWord)
+            if(langSRC == "" || langDST == "" || word == ""){
                 Toast.makeText(this, "Fill the empty field(s)", Toast.LENGTH_SHORT).show()
+            }
+            else if(urlDic == ""){
+                Toast.makeText(this, "Make sure to enter the correct word", Toast.LENGTH_SHORT).show()
             }
             else{
                 // Insertion des différents éléments
-                model.insertLanguage(src_lang)
-                model.insertLanguage(dst_lang)
-                Thread.sleep(200) // Pour laisser le temps aux langages d'être insérés et que ça ne crée pas une erreur de FOREIGN KEY
-                model.insertWord(word,src_lang,dst_lang,url)
-                model.insertDictionnary(src_lang,dst_lang,url)
-                /* TODO: Trouver une solution plus viable que ça
-                Thread.sleep(500)
-                model.insertWordDicAssociation(lastWord,lastDic)
+                model.insertLanguage(langSRC)
+                model.insertLanguage(langDST)
+                Thread.sleep(500) // Pour laisser le temps aux langages d'être insérés et que ça ne crée pas une erreur de FOREIGN KEY
+                model.insertWord(word,langSRC,langDST,urlWord)
+                model.insertDictionnary(langSRC,langDST,urlDic)
+                /* TODO: Trouver une solution plus viable que ça */
+                Thread.sleep(200)
+                Thread{
+                    model.getLastDic(urlDic)
+                    model.getLastWord(word,langSRC,langDST)
+                    model.insertWordDicAssociation(lastWord,lastDic)
+                }.start()
 
-                 */
 
 
 

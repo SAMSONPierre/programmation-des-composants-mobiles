@@ -46,8 +46,9 @@ class SearchTranslationFragment : Fragment(R.layout.fragment_search_translation)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentSearchTranslationBinding.bind(view);
         binding.googleButton.setOnClickListener{
+            var word = binding.wordEdit.text.toString()
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.setData( Uri.parse("https://www.google.fr/") )
+            intent.setData( Uri.parse("https://www.google.fr/search?q=" + word) )
             startActivity( intent )
 
         }

@@ -67,9 +67,9 @@ interface Dao {
     @Query("SELECT * FROM Dictionary")
     fun loadWordsFromDic(): LiveData<List<WordDictionaryPair>>
 
-    @Query("SELECT idDic FROM Dictionary ORDER BY idDic DESC LIMIT 1")
-    fun getLastDic(): LiveData<Long>
+    @Query("SELECT idDic FROM Dictionary WHERE Dictionary.urlPrefix = :url")
+    fun getLastDic(url : String): Long
 
-    @Query("SELECT idWord FROM Word ORDER BY idWord DESC LIMIT 1")
-    fun getLastWord(): LiveData<Long>
+    @Query("SELECT idWord FROM Word WHERE word = :nom AND lang_src = :langSRC AND lang_dst = :langDST")
+    fun getLastWord(nom : String,langSRC : String,langDST : String ): Long
 }

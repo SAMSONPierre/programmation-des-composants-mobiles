@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 class SauvegardeViewModel(application: Application) : AndroidViewModel(application) {
     val dao = (application as DictionaryApplication).database.dao()
 
+
     fun insertLanguage(l_name : String) {
         Thread {
             val l = dao.insertLanguage(Lang(name = l_name.trim()))
@@ -42,13 +43,20 @@ class SauvegardeViewModel(application: Application) : AndroidViewModel(applicati
         }.start()
     }
 
-    fun getLastWord() : LiveData<Long>{
-        return dao.getLastWord()
+    fun getLastWord(word : String,lang_src : String, lang_dst : String){
+        var l= dao.getLastWord(word,lang_src,lang_dst)
+        idWord.postValue(l)
+        Log.d("TAG","idWord : " + idWord.value)
     }
 
-    fun getLastDic() : LiveData<Long>{
-        return dao.getLastDic()
+    fun getLastDic(url : String){
+        var l = dao.getLastDic(url)
+        idDic.postValue(l)
+        Log.d("TAG","idDic : " + idDic.value)
     }
+
+    var idDic = MutableLiveData<Long>()
+    var idWord = MutableLiveData<Long>()
 
     val insertInfo = MutableLiveData<Int>(0)
 }

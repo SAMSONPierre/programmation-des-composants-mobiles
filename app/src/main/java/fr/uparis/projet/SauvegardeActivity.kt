@@ -18,8 +18,6 @@ class SauvegardeActivity : AppCompatActivity() {
 
     private fun parseURL(word : String, url : String) : String{
         var index = url.indexOf(word.lowercase().trim())
-        Log.d("parse url", url)
-        Log.d("index", "$index")
         return if(index == -1) ""
         else url.subSequence(0,index).toString()
     }
@@ -49,7 +47,6 @@ class SauvegardeActivity : AppCompatActivity() {
             val langDST = binding.targetEdit.text.toString().trim()
             val word = binding.wordEdit.text.toString().trim()
             val urlDic = parseURL(word,urlWord)
-            Log.d("url", urlDic)
             if(langSRC == "" || langDST == "" || word == ""){
                 Toast.makeText(this, "Fill the empty field(s)", Toast.LENGTH_SHORT).show()
             }

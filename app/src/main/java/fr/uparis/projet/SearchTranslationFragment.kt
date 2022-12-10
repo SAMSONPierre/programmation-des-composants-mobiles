@@ -11,18 +11,6 @@ import androidx.fragment.app.activityViewModels
 import fr.uparis.projet.databinding.FragmentSearchTranslationBinding
 
 
-
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchTranslationFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SearchTranslationFragment : Fragment(R.layout.fragment_search_translation) {
     private val model: MainViewModel by activityViewModels()
     lateinit var binding : FragmentSearchTranslationBinding
@@ -46,9 +34,9 @@ class SearchTranslationFragment : Fragment(R.layout.fragment_search_translation)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentSearchTranslationBinding.bind(view);
         binding.googleButton.setOnClickListener{
-            var word = binding.wordEdit.text.toString()
+            val toSearch = "${binding.wordEdit.text.toString()} ${binding.langSrcGoogle.text.toString()} to ${binding.langDstGoogle.text.toString()}"
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.setData( Uri.parse("https://www.google.fr/search?q=" + word) )
+            intent.data = Uri.parse("https://www.google.fr/search?q=$toSearch")
             startActivity( intent )
 
         }
@@ -56,7 +44,6 @@ class SearchTranslationFragment : Fragment(R.layout.fragment_search_translation)
 
 
     companion object {
-
         @JvmStatic
         fun newInstance() = SearchTranslationFragment()
     }

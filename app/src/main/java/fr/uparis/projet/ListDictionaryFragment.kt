@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import fr.uparis.projet.databinding.FragmentListDictionaryBinding
 import fr.uparis.projet.databinding.FragmentListDictionaryListBinding
 import fr.uparis.projet.databinding.FragmentListWordBinding
+import kotlin.concurrent.thread
 
 class ListDictionaryFragment() : Fragment() {
     private val model: MainViewModel by activityViewModels() // shared viewModel entre MainActivity et les fragments
@@ -58,11 +59,14 @@ class ListDictionaryFragment() : Fragment() {
                         .show()
             }
             else{
-                model.loadWordsOfSelectedDic(model.selectedDic!!.idDic)
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_view, ListWordFragment.newInstance(model.selectedDic!!.idDic))
-                    .addToBackStack(null)
-                    .commit()
+                thread{
+                    model.loadWordsOfSelectedDic(model.selectedDic!!.idDic)
+
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container_view, ListWordFragment.newInstance(model.selectedDic!!.idDic))
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
         }
     }

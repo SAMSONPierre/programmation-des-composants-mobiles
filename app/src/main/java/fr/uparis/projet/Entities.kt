@@ -2,11 +2,9 @@ package fr.uparis.projet
 
 import androidx.room.*
 
-@Entity(indices = [Index(value = ["name"], unique = true)])
+@Entity
 data class Language(
-    @ColumnInfo(name="idLang", index=true)
-    @PrimaryKey(autoGenerate=true) var idLang: Long,
-    var name: String
+    @PrimaryKey var name: String
 )
 
 // pour pouvoir ajouter une langue sans cle primaire
@@ -15,7 +13,6 @@ data class Lang(
 )
 
 @Entity(
-    indices = [Index(value = ["word","lang_src","lang_dst"], unique = true)],
     foreignKeys=[ForeignKey(
         entity=Language::class,
         parentColumns=["name"],
@@ -51,7 +48,7 @@ data class WordInfo2(
 )
 
 @Entity(
-    indices = [Index(value = ["lang_src","lang_dst","urlPrefix"], unique = true)],
+    indices= [Index(value=["urlPrefix"], unique=true)],
     foreignKeys=[ForeignKey(
         entity=Language::class,
         parentColumns=["name"],
@@ -96,18 +93,12 @@ data class WordDicAssociation(
     var idDic: Long
 )
 
-data class WordDictionaryPair(
-    @Embedded
-    var dictionary: Dictionary,
+data class DictionaryWithWords(
+    @Embedded val dictionary: Dictionary,
     @Relation(
         parentColumn = "idDic",
-        entity = Word::class,
         entityColumn = "idWord",
-        associateBy = Junction(
-            value = WordDicAssociation::class,
-            parentColumn = "idDic",
-            entityColumn = "idWord"
-        )
+        associateBy = Junction(WordDicAssociation::class)
     )
-    var word: List<WordInfo2>
+    val words: List<Word>
 )

@@ -18,17 +18,17 @@ import fr.uparis.projet.databinding.FragmentListWordListBinding
 class ListWordFragment() : Fragment() {
     private val model: MainViewModel by activityViewModels()
     lateinit var binding: FragmentListWordListBinding
-    val adapter by lazy{MyWordRecyclerViewAdapter(model.selectedDicWords?.value?: listOf(), model)}
+    val adapter by lazy{MyWordRecyclerViewAdapter(model.listWords?:listOf(), model)}
 
     override fun onStart() {
         super.onStart()
         /** observer sur la liste de mots d'un dictionnaire **/
         model.selectedDicWords?.observe(viewLifecycleOwner){
-            adapter.words=it
+            adapter.words=it[0].words
             adapter.notifyDataSetChanged()
         }
 
-        model.selectedDicWords2?.observe(viewLifecycleOwner){
+        model.selectedDicWords?.observe(viewLifecycleOwner){
 
         }
     }

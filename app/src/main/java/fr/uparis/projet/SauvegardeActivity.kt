@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import fr.uparis.projet.databinding.ActivitySauvegardeBinding
+import kotlin.concurrent.thread
 
 class SauvegardeActivity : AppCompatActivity() {
 
@@ -26,14 +27,6 @@ class SauvegardeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySauvegardeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        model.idWord.observe(this){
-            lastWord = it
-
-        }
-        model.idDic.observe(this){
-            lastDic = it
-        }
 
         if( intent.action.equals( "android.intent.action.SEND" ) ){
             val txt = intent.extras?.getString( "android.intent.extra.TEXT" )
@@ -55,21 +48,18 @@ class SauvegardeActivity : AppCompatActivity() {
             }
             else{
                 // Insertion des différents éléments
-                model.insertLanguage(langSRC)
-                model.insertLanguage(langDST)
-                Thread.sleep(500) // Pour laisser le temps aux langages d'être insérés et que ça ne crée pas une erreur de FOREIGN KEY
-                model.insertWord(word,langSRC,langDST,urlWord)
-                model.insertDictionnary(langSRC,langDST,urlDic)
-                /* TODO: Trouver une solution plus viable que ça */
-                Thread.sleep(200)
-                Thread{
-                    model.getLastDic(urlDic)
-                    model.getLastWord(word,langSRC,langDST)
-                    model.insertWordDicAssociation(lastWord,lastDic)
-                }.start()
-
-
-
+                thread{
+                    model.insertLanguage(langSRC)
+                    model.insertLanguage(langDST)
+                    //Thread.sleep(500) // Pour laisser le temps aux langages d'être insérés et que ça ne crée pas une erreur de FOREIGN KEY
+                    val idWord=model.insertWord(word,langSRC,langDST,urlWord)
+                    var idDic=model.insertDictionnary(langSRC,langDST,urlDic)
+                    if(idDic==-1L) idDic=model.getDicID(urlDic)
+                    val wd=model.insertWordDicAssociation(idWord, idDic)
+                    Log.d("last dic", "$idWord")
+                    Log.d("last word", "$idDic")
+                    for(id in wd) Log.d("l[] WD after", "$id")
+                }
 
                 // On retourne à la page principale
                 val intent = Intent(this, MainActivity::class.java)

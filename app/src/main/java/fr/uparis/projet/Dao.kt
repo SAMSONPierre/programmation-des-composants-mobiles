@@ -56,20 +56,15 @@ interface Dao {
     @Query("SELECT * FROM Dictionary")
     fun loadAllDictionaries(): LiveData<List<Dictionary>>
 
-    // selectionner les mots d'un dictionnaire
-    @Query("SELECT Word.idWord, Word.word, Word.lang_src, Word.lang_dst, Word.urlToTranslation " +
-            "FROM Word " +
-            "NATURAL JOIN WordDicAssociation " +
-            "WHERE WordDicAssociation.idDic = :idDictionary")
-    fun loadWordsFromDic(idDictionary: Long): LiveData<List<Word>>
+    // selectionner les mots d'un dictionnaire : ne marche pas
+    @Transaction
+    @Query("SELECT * FROM Dictionary WHERE idDic=:idDictionary")
+    fun loadWordsFromDic(idDictionary: Long): LiveData<List<DictionaryWithWords>>
 
     @Transaction
     @Query("SELECT * FROM Dictionary")
-    fun loadWordsFromDic(): LiveData<List<WordDictionaryPair>>
+    fun loadDictionariesWithWords(): List<DictionaryWithWords>
 
     @Query("SELECT idDic FROM Dictionary WHERE Dictionary.urlPrefix = :url")
-    fun getLastDic(url : String): Long
-
-    @Query("SELECT idWord FROM Word WHERE word = :nom AND lang_src = :langSRC AND lang_dst = :langDST")
-    fun getLastWord(nom : String,langSRC : String,langDST : String ): Long
+    fun getDicID(url : String): Long
 }

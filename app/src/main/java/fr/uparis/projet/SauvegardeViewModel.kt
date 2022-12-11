@@ -7,56 +7,33 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
+
 class SauvegardeViewModel(application: Application) : AndroidViewModel(application) {
     val dao = (application as DictionaryApplication).database.dao()
 
-
     fun insertLanguage(l_name : String) {
-        Thread {
-            val l = dao.insertLanguage(Lang(name = l_name.trim()))
-            insertInfo.postValue(if (l[0] == -1L) 0 else 1)
-            Log.d(ContentValues.TAG, "insert ${insertInfo.value} elements")
-        }.start()
+        dao.insertLanguage(Lang(name = l_name.trim()))
     }
 
-    fun insertWord(w_name : String,src_name : String,dst_name : String,url : String) {
-        Thread {
-            val l = dao.insertWord(WordInfo2(word = w_name.trim(), lang_src = src_name.trim(), lang_dst = dst_name.trim(), urlToTranslation = url.trim() ))
-            insertInfo.postValue(if (l[0] == -1L) 0 else 1)
-            Log.d(ContentValues.TAG, "insert ${insertInfo.value} elements")
-
-        }.start()
-    }
-    fun insertDictionnary(src_name : String,dst_name : String,url : String)  {
-        Thread {
-            val l = dao.insertDictionary(DictionaryLang(lang_src = src_name.trim(), lang_dst = dst_name.trim(), urlPrefix = url.trim()))
-            insertInfo.postValue(if (l[0] == -1L) 0 else 1)
-            Log.d(ContentValues.TAG, "insert ${insertInfo.value} elements")
-        }.start()
+    fun insertWord(w_name : String,src_name : String,dst_name : String,url : String): Long {
+        val l = dao.insertWord(WordInfo2(word = w_name.trim(), lang_src = src_name.trim(), lang_dst = dst_name.trim(), urlToTranslation = url.trim() ))
+        for(id in l) Log.d("l[] W", "$id")
+        return l[0]
     }
 
-    fun insertWordDicAssociation(id_word: Long, id_dic: Long){
-        Thread {
-            val l = dao.insertWordDictionary(WordDicAssociation(id_word,id_dic))
-            insertInfo.postValue(if (l[0] == -1L) 0 else 1)
-            Log.d(ContentValues.TAG, "insert ${insertInfo.value} elements")
-        }.start()
+    fun insertDictionnary(src_name : String,dst_name : String,url : String): Long {
+        val l = dao.insertDictionary(DictionaryLang(lang_src = src_name.trim(), lang_dst = dst_name.trim(), urlPrefix = url.trim()))
+        for(id in l) Log.d("l[] D", "$id")
+        return l[0]
     }
 
-    fun getLastWord(word : String,lang_src : String, lang_dst : String){
-        var l= dao.getLastWord(word,lang_src,lang_dst)
-        idWord.postValue(l)
-        Log.d("TAG","idWord : " + idWord.value)
+    fun insertWordDicAssociation(id_word: Long, id_dic: Long): List<Long>{
+        val l = dao.insertWordDictionary(WordDicAssociation(id_word,id_dic))
+        for(id in l) Log.d("l[] WD", "$id")
+        return l
     }
 
-    fun getLastDic(url : String){
-        var l = dao.getLastDic(url)
-        idDic.postValue(l)
-        Log.d("TAG","idDic : " + idDic.value)
+    fun getDicID(url: String): Long{
+        return dao.getDicID(url)
     }
-
-    var idDic = MutableLiveData<Long>()
-    var idWord = MutableLiveData<Long>()
-
-    val insertInfo = MutableLiveData<Int>(0)
 }

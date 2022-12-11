@@ -22,7 +22,6 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_margin="@dimen/text_margin"
             android:tag="Destination"
             android:textAppearance="?attr/textAppearanceListItem" />
@@ -31,7 +30,6 @@
             android:id="@+id/url"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_margin="@dimen/text_margin"
             android:tag="URL"
             android:textAppearance="?attr/textAppearanceListItem" />

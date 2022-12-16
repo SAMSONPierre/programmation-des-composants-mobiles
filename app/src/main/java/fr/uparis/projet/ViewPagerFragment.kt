@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentContainer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +14,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import fr.uparis.projet.databinding.FragmentViewPagerBinding
 
 class ViewPagerFragment : Fragment() {
-    lateinit var binding: FragmentViewPagerBinding
+    private lateinit var binding: FragmentViewPagerBinding
 
     class ScreenSlidePagerAdapter(fa: FragmentActivity, var fragmentList: MutableList<Fragment>): FragmentStateAdapter(fa){
         override fun getItemCount(): Int = fragmentList.size
@@ -45,6 +46,13 @@ class ViewPagerFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view=inflater.inflate(R.layout.fragment_view_pager, container, false)
+
+        /** gestion du bouton back dans le view pager **/
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
+            if(binding.pager.currentItem>0){ //rmq : ne quittera pas l'app quand on sera sur fragment search
+                binding.pager.currentItem=binding.pager.currentItem-1
+            }
+        }
         return view
     }
 

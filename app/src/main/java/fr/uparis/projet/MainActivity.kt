@@ -3,7 +3,6 @@ package fr.uparis.projet
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
@@ -18,12 +17,6 @@ class MainActivity : AppCompatActivity() {
     private val model: MainViewModel by viewModels()
     private val binding: ActivityMainBinding by lazy{ActivityMainBinding.inflate(layoutInflater)}
 
-    /*class ScreenSlidePagerAdapter(fa: FragmentActivity, var fragmentList: MutableList<Fragment>): FragmentStateAdapter(fa){
-        override fun getItemCount(): Int = fragmentList.size
-        override fun createFragment(position: Int): Fragment =
-            fragmentList[position]
-    }*/
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         /** binding et action bar **/
@@ -31,42 +24,13 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         setStatusBarColor()
 
-        /** creation de nos fragments **/
-        /*val searchFragment=SearchTranslationFragment.newInstance()
-        val dictionaryFragment=ListDictionaryFragment.newInstance()
-*/
-        /** creation de notre pager adapter pour le contenu de pager **/
-        /*val pagerAdapter= ViewPagerFragment.ScreenSlidePagerAdapter(
-            this, mutableListOf(searchFragment, dictionaryFragment)
-        ) // le relie aussi a notre activity this
-        binding.pager.adapter=pagerAdapter
-
-        *//** mettre les noms de nos tabs **//*
-        val tabs=listOf("SEARCH", "DICTIONARIES")
-        TabLayoutMediator(binding.tabLayout, binding.pager){
-            tab, position -> tab.text=tabs[position]
-        }.attach()*/
-
         /** ajout de notre fragment avec view pager **/
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container_view, ViewPagerFragment.newInstance())
-            .commit()
-        /*
-        //TODO partie tests affichage a enlever quand ok
-        thread {
-            model.dao.insertLanguage(Lang("English"))
-            model.dao.insertLanguage(Lang("French"))
-            model.dao.insertLanguage(Lang("Chinese"))
-            model.dao.insertDictionary(DictionaryLang("English", "French", "https://fr.wikipedia.org/"))
-            model.dao.insertDictionary(DictionaryLang("French", "English", "https://www.linguee.fr/francais-anglais/"))
-            model.dao.insertDictionary(DictionaryLang("French", "Chinese", "https://blabla"))
-            model.dao.insertWord(WordInfo2("bonjour", "French", "English", "https://www.linguee.fr/francais-anglais/search?source=auto&query=bonjour&cw=336"))
-            model.dao.insertWord(WordInfo2("ciment", "French", "English", "https://www.linguee.fr/francais-anglais/search?source=auto&query=ciment&cw=336"))
+        if(savedInstanceState==null){
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_container_view, ViewPagerFragment.newInstance())
+                .commit()
         }
-        */
     }
-
-
 
     /** changer la couleur du status bar **/
     private fun setStatusBarColor(){

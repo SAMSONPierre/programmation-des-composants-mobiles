@@ -13,12 +13,9 @@ class SauvegardeActivity : AppCompatActivity() {
 
     lateinit var binding: ActivitySauvegardeBinding
     private val model: SauvegardeViewModel by viewModels()
-    private var lastDic : Long = 0
-    private var lastWord : Long = 0
-
 
     private fun parseURL(word : String, url : String) : String{
-        var index = url.indexOf(word.lowercase().trim())
+        val index = url.indexOf(word.lowercase().trim())
         return if(index == -1) ""
         else url.subSequence(0,index).toString()
     }
@@ -43,7 +40,7 @@ class SauvegardeActivity : AppCompatActivity() {
             if(langSRC == "" || langDST == "" || word == ""){
                 Toast.makeText(this, "Fill the empty field(s)", Toast.LENGTH_SHORT).show()
             }
-            else if(urlDic == ""){
+            else if(urlDic == ""){ //TODO faire un autre parsing parce que sinon on ne peut pas faire de phrases...
                 Toast.makeText(this, "Make sure to enter the correct word", Toast.LENGTH_SHORT).show()
             }
             else{

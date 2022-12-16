@@ -29,7 +29,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:backgroundTint="@color/colorPrimary"
         tools:ignore="ContentDescription" />
-<!--app:layout_constraintBottom_toBottomOf="parent"
-app:layout_constraintEnd_toEndOf="parent"
-app:backgroundTint="@color/colorPrimary"-->
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,20 +26,6 @@
            android:layout_width="match_parent"
            android:layout_height="match_parent"/>
 
-       <!--<com.google.android.material.tabs.TabLayout
-           android:id="@+id/tabLayout"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:background="@color/colorPrimary"
-           app:layout_scrollFlags="scroll|enterAlways"
-           app:tabSelectedTextColor="@color/teal_700"
-           app:tabTextColor="@color/black" />
-
-       <androidx.viewpager2.widget.ViewPager2
-           android:id="@+id/pager"
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:layout_weight="1" />-->
    </com.google.android.material.appbar.AppBarLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

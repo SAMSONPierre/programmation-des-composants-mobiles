@@ -1,12 +1,17 @@
 package fr.uparis.projet
 
+import android.app.ActivityManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import fr.uparis.projet.databinding.FragmentSearchTranslationBinding
 
@@ -44,7 +49,16 @@ class SearchTranslationFragment : Fragment(R.layout.fragment_search_translation)
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse("https://www.google.fr/search?q=$toSearch")
             startActivity( intent )
+        }
 
+        binding.searchButton.setOnClickListener {
+            //test notifications
+            val serviceIntent=Intent(context, LearningService::class.java)
+            val pendingIntent= PendingIntent.getService(
+                context, 0, serviceIntent, PendingIntent.FLAG_IMMUTABLE
+            )
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O) context?.startForegroundService(serviceIntent)
+            else context?.startService(serviceIntent)
         }
     }
 

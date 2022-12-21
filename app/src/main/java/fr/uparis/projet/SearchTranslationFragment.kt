@@ -3,7 +3,6 @@ package fr.uparis.projet
 import android.app.ActivityManager
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +13,9 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import fr.uparis.projet.databinding.FragmentSearchTranslationBinding
+import android.content.Intent
+import androidx.annotation.RequiresApi
+import android.content.Intent as Intent1
 
 
 class SearchTranslationFragment : Fragment(R.layout.fragment_search_translation) {
@@ -36,6 +38,7 @@ class SearchTranslationFragment : Fragment(R.layout.fragment_search_translation)
         return inflater.inflate(R.layout.fragment_search_translation, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentSearchTranslationBinding.bind(view);
         binding.googleButton.setOnClickListener{
@@ -46,22 +49,17 @@ class SearchTranslationFragment : Fragment(R.layout.fragment_search_translation)
                         else if(dstLang=="") "$srcLang definition"
                         else "$srcLang to $dstLang"
             val toSearch = "${binding.wordEdit.text.toString().trim()} $target"
-            val intent = Intent(Intent.ACTION_VIEW)
+            val intent = Intent1(Intent1.ACTION_VIEW)
             intent.data = Uri.parse("https://www.google.fr/search?q=$toSearch")
             startActivity( intent )
         }
 
         binding.searchButton.setOnClickListener {
-            //test notifications
-            val serviceIntent=Intent(context, LearningService::class.java)
-            val pendingIntent= PendingIntent.getService(
-                context, 0, serviceIntent, PendingIntent.FLAG_IMMUTABLE
-            )
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O) context?.startForegroundService(serviceIntent)
-            else context?.startService(serviceIntent)
+            // TEST NOTIFICATION SERVICE
+            val intent=Intent(context, LearningService::class.java)
+            activity?.applicationContext?.startForegroundService(intent)
         }
     }
-
 
     companion object {
         @JvmStatic

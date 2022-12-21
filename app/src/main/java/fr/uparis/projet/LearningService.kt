@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
@@ -12,9 +13,10 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
+@RequiresApi(Build.VERSION_CODES.M)
 class LearningService : Service() {
     private val CHANNEL_ID="channel"
-    private val notificationManager by lazy {getSystemService(NOTIFICATION_SERVICE) as NotificationManager}
+    private val notificationManager by lazy {getSystemService(NotificationManager::class.java)}
 
     override fun onCreate() {
         /** creation d'un seul notification channel puis regroupement par langue ensuite **/
@@ -23,25 +25,19 @@ class LearningService : Service() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        /*val serviceIntent=Intent(this, LearningService::class.java).apply {
-            action="TODO"
-        }*/
+        Log.d("service", "start")
+        val webPage=Uri.parse("https://fr.m.wikipedia.org/")
+        val intentWiki=Intent(Intent.ACTION_VIEW, webPage)
+        val pendingIntent=PendingIntent.getActivity(this, 1, intentWiki, PendingIntent.FLAG_IMMUTABLE)
+        val notif=NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("Session 1")
+            .setContentText("Word of the day")
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .addAction(R.drawable.small, "WIKI", pendingIntent)
+            .build()
+        startForeground(1, notif)
 
-        //val servicePendingIntent=PendingIntent.getService(this, 1, serviceIntent, PendingIntent.FLAG_IMMUTABLE)
-
-        /*val activityPendingIntent=PendingIntent.getActivity(this, 1, Intent(this, MainActivity::class.java),
-        PendingIntent.FLAG_IMMUTABLE)*/
-
-        //for(i in 1..10){
-            val notification=NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Word ")
-                .setContentText("getWordNbOfTheDay")
-                .setSmallIcon(R.drawable.ic_notification) //Language icon by https://icons8.com
-                //.setContentIntent(activityPendingIntent)
-                .build()
-        startForeground(1, notification)
-        //}
-        return START_NOT_STICKY
+        return super.onStartCommand(intent, flags, startId)
     }
 
     /* Rmq : creer un seul notif channel pour tous les apprentissages
@@ -64,5 +60,5 @@ class LearningService : Service() {
         }
     }
 
-    override fun onBind(intent: Intent): IBinder? = null
+    override fun onBind(intent: Intent): IBinder {TODO()}
 }

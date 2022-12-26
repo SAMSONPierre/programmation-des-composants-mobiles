@@ -56,7 +56,12 @@ interface Dao {
     @Query("SELECT * FROM Dictionary")
     fun loadAllDictionaries(): LiveData<List<Dictionary>>
 
-    // selectionner les mots d'un dictionnaire : ne marche pas
+    // generer tous les dictionnaires qui contiennent les mots qui ont un certain prefixe
+    @Query("SELECT DISTINCT urlToTranslation FROM Word " +
+            "WHERE word LIKE :prefix || '%' ")
+    fun loadDictionariesFromPrefix(prefix: String): LiveData<List<String>>
+
+    //selectionner les mots d'un dictionnaire
     @Transaction
     @Query("SELECT * FROM Dictionary WHERE idDic=:idDictionary")
     fun loadWordsFromDic(idDictionary: Long): LiveData<List<DictionaryWithWords>>

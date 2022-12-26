@@ -14,13 +14,29 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import fr.uparis.projet.databinding.FragmentSearchTranslationBinding
 import android.content.Intent
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.view.Gravity
+import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doOnTextChanged
 import android.content.Intent as Intent1
 
 
 class SearchTranslationFragment : Fragment(R.layout.fragment_search_translation) {
     private val model: MainViewModel by activityViewModels()
-    lateinit var binding : FragmentSearchTranslationBinding
+    private lateinit var binding : FragmentSearchTranslationBinding
+    private lateinit var adapterSpinner : ArrayAdapter<String>
+
+    override fun onStart() {
+        super.onStart()
+
+        model.listDictionariesSpinner.observe(viewLifecycleOwner){
+            adapterSpinner.notifyDataSetChanged()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,15 +70,51 @@ class SearchTranslationFragment : Fragment(R.layout.fragment_search_translation)
             startActivity( intent )
         }
 
-        binding.searchButton.setOnClickListener {
-            // TEST NOTIFICATION SERVICE
-            val intent=Intent(context, LearningService::class.java)
-            activity?.applicationContext?.startForegroundService(intent)
-        }
+        binding.wordEdit.addTextChangedListener(object: TextWatcher{
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                loadPartialName(s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        binding.searchButton.setOnClickListener { searchDic() }
+
+        /** spinner adapter **/
+        setSpinner()
+    }
+
+
+    private fun setSpinner(){
+        adapterSpinner = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item)
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinner.adapter = adapterSpinner
+    }
+
+    /** on met dynamiquement les dictionnaires contenant le mot dans le spinner, sinon on
+     * le laisse vide
+     */
+    private fun loadPartialName(prefix: String){
+        if(prefix=="") adapterSpinner.clear()
+        else
+            model.loadPartialName(prefix).observe(viewLifecycleOwner){
+                adapterSpinner.clear()
+                adapterSpinner.addAll(it)
+                adapterSpinner.notifyDataSetChanged()
+            }
+    }
+
+    /** search button onclick **/
+    fun searchDic() {
+        val intent=Intent(Intent.ACTION_VIEW)
+        intent.data=Uri.parse(binding.spinner.selectedItem as String)
+        startActivity(intent)
     }
 
     companion object {
         @JvmStatic
         fun newInstance() = SearchTranslationFragment()
     }
+
 }

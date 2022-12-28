@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
+import com.google.android.material.snackbar.Snackbar
 import android.content.Intent as Intent1
 
 
@@ -79,7 +80,7 @@ class SearchTranslationFragment : Fragment(R.layout.fragment_search_translation)
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        binding.searchButton.setOnClickListener { searchDic() }
+        binding.searchButton.setOnClickListener { searchWord() }
 
         /** spinner adapter **/
         setSpinner()
@@ -106,10 +107,15 @@ class SearchTranslationFragment : Fragment(R.layout.fragment_search_translation)
     }
 
     /** search button onclick **/
-    fun searchDic() {
-        val intent=Intent(Intent.ACTION_VIEW)
-        intent.data=Uri.parse(binding.spinner.selectedItem as String)
-        startActivity(intent)
+    private fun searchWord() {
+        if(binding.spinner.selectedItem == null)
+            Snackbar.make(requireActivity().findViewById(R.id.fragment_container_view), "No dictionary matches the word/sentence.", Snackbar.LENGTH_LONG)
+                .show()
+        else {
+            val intent=Intent(Intent.ACTION_VIEW)
+            intent.data=Uri.parse(binding.spinner.selectedItem as String)
+            startActivity(intent)
+        }
     }
 
     companion object {

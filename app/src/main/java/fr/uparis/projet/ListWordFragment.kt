@@ -2,14 +2,12 @@ package fr.uparis.projet
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import fr.uparis.projet.databinding.FragmentListWordBinding
+import androidx.recyclerview.widget.ItemTouchHelper
 import fr.uparis.projet.databinding.FragmentListWordListBinding
 
 /**
@@ -24,12 +22,10 @@ class ListWordFragment() : Fragment() {
         super.onStart()
         /** observer sur la liste de mots d'un dictionnaire **/
         model.selectedDicWords?.observe(viewLifecycleOwner){
-            adapter.words=it[0].words
-            adapter.notifyDataSetChanged()
-        }
-
-        model.selectedDicWords?.observe(viewLifecycleOwner){
-
+            if(it.isNotEmpty()){
+                adapter.words=it[0].words
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 
@@ -46,6 +42,10 @@ class ListWordFragment() : Fragment() {
         /** set adapter de notre recycler view **/
         binding.recyclerView.adapter=adapter
         binding.recyclerView.layoutManager=LinearLayoutManager(context)
+
+        /** on swipe delete en utilisant notre delete item touch helper **/
+        val itemTouchHelper= ItemTouchHelper(DeleteCallback(requireContext(), "word", model))
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
 
     companion object {

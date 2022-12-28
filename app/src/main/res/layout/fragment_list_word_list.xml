@@ -29,5 +29,4 @@
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/fragment_list_word" />
 
-
 </androidx.appcompat.widget.LinearLayoutCompat>

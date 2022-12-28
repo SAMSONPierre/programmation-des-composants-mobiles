@@ -1,5 +1,6 @@
 package fr.uparis.projet
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.fragment_container_view, ViewPagerFragment.newInstance())
                 .commit()
         }
+
+        thread { startLearningService() }
     }
 
     /** changer la couleur du status bar **/
@@ -45,6 +48,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu_layout, menu)
         return true
+    }
+
+    /** start service **/
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun startLearningService(){
+        val intent = Intent(this, LearningService::class.java)
+        val words = model.getDailyWords()
+        if(words.count()>=10){
+            intent.putStringArrayListExtra("listWords", words)
+            intent.putStringArrayListExtra("translations", model.getDailyWordsTranslation())
+            intent.putStringArrayListExtra("lang_src", model.getDailyWordsLangSrc())
+            intent.putStringArrayListExtra("lang_dst", model.getDailyWordsLangDst())
+            startService(intent)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =

@@ -87,6 +87,17 @@ class DictionaryInfo(
 // et un dico contient plusieurs mots
 @Entity(
     primaryKeys=["idWord", "idDic"],
+    foreignKeys=[ForeignKey(
+        entity=Word::class,
+        parentColumns=["idWord"],
+        childColumns=["idWord"],
+        onDelete=ForeignKey.CASCADE
+    ), ForeignKey(
+        entity=Dictionary::class,
+        parentColumns=["idDic"],
+        childColumns=["idDic"],
+        onDelete=ForeignKey.CASCADE
+    )]
 )
 data class WordDicAssociation(
     var idWord: Long,

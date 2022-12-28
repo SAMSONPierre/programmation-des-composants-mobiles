@@ -39,6 +39,31 @@ interface Dao {
     // TODO : quelles tables sont susceptibles d'etre mises a jour ?
 
     /** Suppressions **/
+    // supprimer un mot
+    @Delete(entity=Word::class)
+    fun deleteWord(word: Word): Int
+
+    @Query("SELECT * FROM Dictionary, WordDicAssociation " +
+            "WHERE idWord = :idWord " +
+            "AND Dictionary.idDic = WordDicAssociation.idDic")
+    fun findDic(idWord: Long): List<Dictionary>
+
+    // supprimer un dictionnaire
+    @Delete(entity=Dictionary::class)
+    fun deleteDictionary(dic: Dictionary): Int
+
+    // supprimer dans l'association quand on supp un dictionnaire (on supprime ses mots)
+    @Query("DELETE FROM WordDicAssociation WHERE idDic = :idDic")
+    fun deleteDictionaryId(idDic: Long): Int
+
+    // si un mot n'appartient qu'a un seul dictionnaire, on le supprime si on supprime le dico
+    @Query("SELECT * FROM Word, WordDicAssociation " +
+            "WHERE idDic = :idDic " +
+            "AND Word.idWord = WordDicAssociation.idWord " +
+            "AND (SELECT COUNT(*) FROM WordDicAssociation as wd2 " +
+                "WHERE wd2.idWord = Word.idWord) = 1")
+    fun loadWordsToDelete(idDic: Long): List<Word>
+
     // supprimer une traduction
     @Delete(entity=Word::class)
     fun deleteWordsTranslations(ids: List<WordInfo>): Int
@@ -50,7 +75,7 @@ interface Dao {
     /** Requetes **/
     // generer toutes les traductions
     @Query("SELECT * FROM Word")
-    fun loadAllWordsTranslations(): LiveData<List<Word>>
+    fun loadAllWordsTranslations(): List<Word>
 
     // generer tous les dictionnaires
     @Query("SELECT * FROM Dictionary")
@@ -72,4 +97,9 @@ interface Dao {
 
     @Query("SELECT idDic FROM Dictionary WHERE Dictionary.urlPrefix = :url")
     fun getDicID(url : String): Long
+
+    // selectionner tous les mots avec lang_src et lang_dst
+    @Query("SELECT word FROM Word " +
+            "WHERE lang_src = :langSrc AND lang_dst = :langDst")
+    fun getWordFromLang(langSrc: String, langDst: String): List<String>
 }

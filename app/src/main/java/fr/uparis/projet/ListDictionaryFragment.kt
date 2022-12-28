@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
 import fr.uparis.projet.databinding.FragmentListDictionaryBinding
@@ -47,6 +48,10 @@ class ListDictionaryFragment() : Fragment() {
 
         /** on s'occupe de notre fab **/
         initFAB()
+
+        /** on swipe delete en utilisant notre delete item touch helper **/
+        val itemTouchHelper=ItemTouchHelper(DeleteCallback(requireContext(), "dictionary", model))
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
 
     /** lorsqu'on a selectionne un dictionnaire

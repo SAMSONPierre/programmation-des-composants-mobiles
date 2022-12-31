@@ -14,7 +14,23 @@ class SauvegardeActivity : AppCompatActivity() {
     lateinit var binding: ActivitySauvegardeBinding
     private val model: SauvegardeViewModel by viewModels()
 
+    private fun countOccurrences(s: String, ch: Char): Int {
+        return s.filter { it == ch }.count()
+    }
+
     private fun parseURL(word : String, url : String) : String{
+        if(countOccurrences(word,' ') > 0){
+            // 3 de manières arbitraires parce que dans les URLs j'ai vu que l'apostrophe pouvait être changée par "-" ou "%27"
+            // et je peux pas mettre ".*" parce que sinon ça peut très mal parser l'URL.
+            val pattern = Regex(word.replace("'",".{0,3}").replace(" ",".*"))
+            val match = pattern.find(url)!!
+
+            if(match.value != ""){
+                val index = url.indexOf(match.value)
+                return url.subSequence(0,index).toString()
+            }
+            return ""
+        }
         val index = url.indexOf(word.lowercase().trim())
         return if(index == -1) ""
         else url.subSequence(0,index).toString()
@@ -40,7 +56,7 @@ class SauvegardeActivity : AppCompatActivity() {
             if(langSRC == "" || langDST == "" || word == ""){
                 Toast.makeText(this, "Fill the empty field(s)", Toast.LENGTH_SHORT).show()
             }
-            else if(urlDic == ""){ //TODO faire un autre parsing parce que sinon on ne peut pas faire de phrases...
+            else if(urlDic == ""){
                 Toast.makeText(this, "Make sure to enter the correct word", Toast.LENGTH_SHORT).show()
             }
             else{

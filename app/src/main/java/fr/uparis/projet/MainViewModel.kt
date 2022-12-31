@@ -25,6 +25,9 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
     var swipedDictionary: Dictionary? = null
     var swipedWord: Word? = null
 
+    /** for special learning sessions **/
+    var listPairLanguages=dao.loadLanguagesPairs()
+
     fun loadWordsOfSelectedDic(idDic: Long){
         selectedDicWords=dao.loadWordsFromDic(idDic)
         listWords=selectedDicWords?.value?.get(0)?.words

@@ -71,7 +71,10 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.settings->{
-                Toast.makeText(this, "Settings selected", Toast.LENGTH_SHORT).show()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, SettingsFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit()
                 true
             }
             else->super.onOptionsItemSelected(item)

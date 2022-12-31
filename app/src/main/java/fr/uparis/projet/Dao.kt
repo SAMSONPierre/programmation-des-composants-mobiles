@@ -102,4 +102,8 @@ interface Dao {
     @Query("SELECT word FROM Word " +
             "WHERE lang_src = :langSrc AND lang_dst = :langDst")
     fun getWordFromLang(langSrc: String, langDst: String): List<String>
+
+    // for special sessions : selectionner tous les paires de langues disponibles
+    @Query("SELECT DISTINCT lang_src, lang_dst FROM Word")
+    fun loadLanguagesPairs(): LiveData<List<LanguagePair>>
 }

@@ -113,3 +113,8 @@ data class DictionaryWithWords(
     )
     val words: List<Word>
 )
+
+data class LanguagePair(
+    val lang_src: String,
+    val lang_dst: String
+)

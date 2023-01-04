@@ -84,10 +84,6 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
 
     /** select random words from all available words **/
     fun getGlobalDailyWords(nbWords: Int): MutableList<Word> {
-        /* tests purpose */
-        val words = dao.loadAllWordsTranslations()
-        for(word in words) dao.updateLookedUp(0, word.idWord)
-
         globalWordsOfTheDay = dao.loadWordsGlobal()
             .asSequence().shuffled().take(nbWords).toMutableList()
         return globalWordsOfTheDay

@@ -68,10 +68,7 @@ class SauvegardeActivity : AppCompatActivity() {
                     val idWord=model.insertWord(word,langSRC,langDST,urlWord)
                     var idDic=model.insertDictionnary(langSRC,langDST,urlDic)
                     if(idDic==-1L) idDic=model.getDicID(urlDic)
-                    val wd=model.insertWordDicAssociation(idWord, idDic)
-                    Log.d("last dic", "$idWord")
-                    Log.d("last word", "$idDic")
-                    for(id in wd) Log.d("l[] WD after", "$id")
+                    model.insertWordDicAssociation(idWord, idDic)
                 }
 
                 // On retourne à la page principale

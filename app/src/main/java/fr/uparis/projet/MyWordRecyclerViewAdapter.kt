@@ -11,9 +11,10 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import fr.uparis.projet.databinding.FragmentListWordBinding
+import fr.uparis.projet.databinding.FragmentListWordListBinding
 import java.nio.file.Files.size
 
-class MyWordRecyclerViewAdapter(var words: List<Word>?, private val model: MainViewModel) : RecyclerView.Adapter<MyWordRecyclerViewAdapter.VH>() {
+class MyWordRecyclerViewAdapter(val wordFragmentBinding: FragmentListWordListBinding, var words: List<Word>?, private val model: MainViewModel) : RecyclerView.Adapter<MyWordRecyclerViewAdapter.VH>() {
     class VH(val binding: FragmentListWordBinding): RecyclerView.ViewHolder(binding.root) {
         lateinit var word: Word
     }
@@ -34,15 +35,22 @@ class MyWordRecyclerViewAdapter(var words: List<Word>?, private val model: MainV
 
             /* on ouvre la page de traduction du mot */
             holder.itemView.setOnClickListener{
-                val webTranslation = Uri.parse(holder.word.urlToTranslation)
-                val webIntent = Intent(Intent.ACTION_VIEW, webTranslation)
-                webIntent.flags = (Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                holder.itemView.context.startActivity(webIntent)
+                if(model.selectedWords.contains(holder.word))
+                    model.selectedWords.remove(holder.word)
+                else
+                    model.selectedWords.add(holder.word)
+                wordFragmentBinding.reviewButton.isEnabled = (model.selectedWords.size==1)
+                notifyDataSetChanged()
             }
 
-            when (position % 2) {
-                0 -> (holder.itemView as CardView).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.salmon))
-                1 -> (holder.itemView as CardView).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.salmonDarker))
+            if(model.selectedWords.contains(holder.word)){
+                (holder.itemView as CardView).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.salmonDarkest))
+            }
+            else{
+                when (position % 2) {
+                    0 -> (holder.itemView as CardView).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.salmon))
+                    1 -> (holder.itemView as CardView).setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.salmonDarker))
+                }
             }
         }
     }

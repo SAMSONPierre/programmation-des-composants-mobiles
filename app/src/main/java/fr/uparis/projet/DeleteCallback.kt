@@ -13,6 +13,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * This class is used to implement on swipe delete for both words and dictionaries
+ */
 class DeleteCallback(val context: Context, private val typeItem: String, private val model: MainViewModel): ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
     private var adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>? = null
 
@@ -54,8 +57,9 @@ class DeleteCallback(val context: Context, private val typeItem: String, private
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
 
+    /** confirm dialog to delete or cancel **/
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        val alertDialog = AlertDialog.Builder(context)
+        AlertDialog.Builder(context)
             .setMessage("Are you sure you want to delete this $typeItem ?")
             .setPositiveButton("Confirm" ){ _, _ ->
                 if (typeItem == "dictionary") {

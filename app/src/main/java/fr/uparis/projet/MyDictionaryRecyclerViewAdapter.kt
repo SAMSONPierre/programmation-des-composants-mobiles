@@ -12,8 +12,6 @@ import fr.uparis.projet.databinding.FragmentListDictionaryBinding
 
 class MyDictionaryRecyclerViewAdapter(var dictionaries: List<Dictionary>, private val model: MainViewModel):
     RecyclerView.Adapter<MyDictionaryRecyclerViewAdapter.VH>() {
-        private var containerID: Int=0
-
         class VH(val binding: FragmentListDictionaryBinding): RecyclerView.ViewHolder(binding.root){
             lateinit var dictionary: Dictionary
         }
@@ -30,17 +28,6 @@ class MyDictionaryRecyclerViewAdapter(var dictionaries: List<Dictionary>, privat
                 langSrc.text=holder.dictionary.lang_src
                 langDst.text=holder.dictionary.lang_dst
                 url.text=holder.dictionary.urlPrefix
-            }
-
-            /* on ouvre le fragment correspondant au dictionnaire */
-            holder.itemView.setOnClickListener {
-                val mainActivity=it.context as AppCompatActivity
-                val wordsFragment=ListWordFragment.newInstance(holder.dictionary.idDic)
-
-                mainActivity.supportFragmentManager.beginTransaction()
-                    .replace(containerID, wordsFragment)
-                    .addToBackStack(null)
-                    .commit()
             }
 
             if(holder.dictionary==model.selectedDic){

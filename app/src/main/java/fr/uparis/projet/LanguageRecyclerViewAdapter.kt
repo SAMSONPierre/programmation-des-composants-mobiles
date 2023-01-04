@@ -16,7 +16,12 @@ import androidx.recyclerview.widget.RecyclerView
 import fr.uparis.projet.databinding.ConfigSpecialSessionBinding
 import fr.uparis.projet.databinding.LanguageRecyclerItemBinding
 
+
+/**
+ * Pour afficher les paires de langues dans les settings
+ */
 class LanguageRecyclerViewAdapter(val fragmentManager: FragmentManager, var pairs: List<LanguagePair>?, private val model: MainViewModel) : RecyclerView.Adapter<LanguageRecyclerViewAdapter.VH>() {
+    var currentDialog: ConfigFragment? = null
 
     class VH(val binding: LanguageRecyclerItemBinding): RecyclerView.ViewHolder(binding.root) {
         lateinit var pair: LanguagePair
@@ -36,10 +41,10 @@ class LanguageRecyclerViewAdapter(val fragmentManager: FragmentManager, var pair
                 langDst.text=holder.pair.lang_dst
             }
 
-            /* TODO on ouvre un popup de configuration */
+            /* on ouvre un popup de configuration */
             holder.itemView.setOnClickListener{
-                val configDialog = ConfigFragment()
-                configDialog.show(fragmentManager, "CONFIG")
+                currentDialog = ConfigFragment(model, holder.pair)
+                currentDialog!!.show(fragmentManager, "CONFIG")
             }
 
             when (position % 2) {

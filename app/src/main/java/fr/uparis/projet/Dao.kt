@@ -36,8 +36,6 @@ interface Dao {
     @Insert(onConflict=OnConflictStrategy.IGNORE)
     fun insertWordDictionary(vararg wd: WordDicAssociation): List<Long>
 
-    // TODO : quelles tables sont susceptibles d'etre mises a jour ?
-
     /** Suppressions **/
     // supprimer un mot
     @Delete(entity=Word::class)
@@ -73,6 +71,7 @@ interface Dao {
     fun deleteDictionaries(ids: List<DictionaryInfo>): Int
 
     /** Requetes **/
+
     // generer toutes les traductions
     @Query("SELECT * FROM Word")
     fun loadAllWordsTranslations(): List<Word>
@@ -98,12 +97,31 @@ interface Dao {
     @Query("SELECT idDic FROM Dictionary WHERE Dictionary.urlPrefix = :url")
     fun getDicID(url : String): Long
 
+    @Query("SELECT * FROM Word WHERE word = :word")
+    fun getWord(word : String): Word
+
     // selectionner tous les mots avec lang_src et lang_dst
     @Query("SELECT word FROM Word " +
             "WHERE lang_src = :langSrc AND lang_dst = :langDst")
     fun getWordFromLang(langSrc: String, langDst: String): List<String>
 
+    // for global session
+    @Query("SELECT * FROM Word WHERE lookedUp < 4")
+    fun loadWordsGlobal(): List<Word>
+
     // for special sessions : selectionner tous les paires de langues disponibles
     @Query("SELECT DISTINCT lang_src, lang_dst FROM Word")
     fun loadLanguagesPairs(): LiveData<List<LanguagePair>>
+
+    @Query("SELECT * FROM Word " +
+            "WHERE lang_src = :langSrc AND lang_dst = :langDst" +
+            " AND lookedUp < 4")
+    fun loadWordsOfPair(langSrc: String, langDst: String): List<Word>
+
+    /** updating and getting learning parameters **/
+    @Query("UPDATE Word SET lookedUp = :newVal WHERE idWord = :idWord")
+    fun updateLookedUp(newVal: Int, idWord: Long)
+
+    @Query("SELECT lookedUp FROM Word WHERE idWord = :idWord")
+    fun getLookedUp(idWord: Long): Int
 }

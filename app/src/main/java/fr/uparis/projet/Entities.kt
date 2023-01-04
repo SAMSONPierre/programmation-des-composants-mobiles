@@ -30,7 +30,8 @@ data class Word(
     var word: String,
     @ColumnInfo(name="lang_src", index=true) var lang_src: String,
     @ColumnInfo(name="lang_dst", index=true) var lang_dst: String,
-    var urlToTranslation: String
+    var urlToTranslation: String,
+    var lookedUp: Int, //nombre de fois quon a ouvert la traduction
 )
 
 // pour pouvoir supprimer un "mot" (pas exactement, juste
@@ -44,7 +45,8 @@ data class WordInfo2(
     var word: String,
     var lang_src: String,
     var lang_dst: String,
-    var urlToTranslation: String
+    var urlToTranslation: String,
+    var lookedUp: Int
 )
 
 @Entity(

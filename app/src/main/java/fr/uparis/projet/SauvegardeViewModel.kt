@@ -16,20 +16,17 @@ class SauvegardeViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun insertWord(w_name : String,src_name : String,dst_name : String,url : String): Long {
-        val l = dao.insertWord(WordInfo2(word = w_name.trim(), lang_src = src_name.trim(), lang_dst = dst_name.trim(), urlToTranslation = url.trim() ))
-        for(id in l) Log.d("l[] W", "$id")
+        val l = dao.insertWord(WordInfo2(word = w_name.trim(), lang_src = src_name.trim(), lang_dst = dst_name.trim(), urlToTranslation = url.trim(), 0))
         return l[0]
     }
 
     fun insertDictionnary(src_name : String,dst_name : String,url : String): Long {
         val l = dao.insertDictionary(DictionaryLang(lang_src = src_name.trim(), lang_dst = dst_name.trim(), urlPrefix = url.trim()))
-        for(id in l) Log.d("l[] D", "$id")
         return l[0]
     }
 
     fun insertWordDicAssociation(id_word: Long, id_dic: Long): List<Long>{
         val l = dao.insertWordDictionary(WordDicAssociation(id_word,id_dic))
-        for(id in l) Log.d("l[] WD", "$id")
         return l
     }
 

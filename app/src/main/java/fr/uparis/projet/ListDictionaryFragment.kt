@@ -68,7 +68,7 @@ class ListDictionaryFragment() : Fragment() {
                     model.loadWordsOfSelectedDic(model.selectedDic!!.idDic)
 
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container_view, ListWordFragment.newInstance(model.selectedDic!!.idDic))
+                        .replace(R.id.fragment_container_view, ListWordFragment.newInstance(model.selectedDic!!.idDic), "wordFragment")
                         .addToBackStack(null)
                         .commit()
                 }

@@ -30,11 +30,9 @@ class MainActivity : AppCompatActivity() {
         /** ajout de notre fragment avec view pager **/
         if(savedInstanceState==null){
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container_view, ViewPagerFragment.newInstance())
+                .add(R.id.fragment_container_view, ViewPagerFragment.newInstance(), "viewPagerFragment")
                 .commit()
         }
-
-        thread { startLearningService() }
     }
 
     /** changer la couleur du status bar **/
@@ -50,20 +48,6 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    /** start service **/
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun startLearningService(){
-        val intent = Intent(this, LearningService::class.java)
-        val words = model.getDailyWords()
-        if(words.count()>=10){
-            intent.putStringArrayListExtra("listWords", words)
-            intent.putStringArrayListExtra("translations", model.getDailyWordsTranslation())
-            intent.putStringArrayListExtra("lang_src", model.getDailyWordsLangSrc())
-            intent.putStringArrayListExtra("lang_dst", model.getDailyWordsLangDst())
-            startService(intent)
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when(item.itemId){
             R.id.exit->{
@@ -72,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.settings->{
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_view, SettingsFragment.newInstance())
+                    .replace(R.id.fragment_container_view, SettingsFragment.newInstance(), "settingsFragment")
                     .addToBackStack(null)
                     .commit()
                 true

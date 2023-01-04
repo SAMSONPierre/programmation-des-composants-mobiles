@@ -48,6 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
+            android:textSize="18sp"
             android:text="Enable" />
 
         <androidx.appcompat.widget.SwitchCompat
@@ -59,9 +60,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
+            android:textSize="18sp"
             android:text="New words per day" />
 
         <EditText
+            android:id="@+id/nbWords"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
@@ -73,7 +76,8 @@
             android:id="@+id/timeGlobal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="18sp"
             android:text="Tap to schedule" />
     </GridLayout>
 
@@ -114,6 +118,7 @@
         tools:listitem="@layout/language_recycler_item" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/saveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
